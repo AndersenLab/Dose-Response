@@ -222,9 +222,6 @@ if (length(strains) != length(unique(strains))) {
 if (length(strains) != length(unique(strains))) {
   ggplot(strain.df[strain.df$time == time, ]) + aes(x = conc, y = mean.activity, color = strain) + geom_line() +
     labs(x = "Concentration of levamisole (µM)", y = "Mean Activity") + presentation
-
-  ggplot(strain.df[strain.df$time == time, ]) + aes(x = conc, y = mean.activity) + facet_wrap( ~ strain) + geom_line() +
-    labs(x = "Concentration of levamisole (µM)", y = "Mean Activity") + presentation 
 }
 
 ```
