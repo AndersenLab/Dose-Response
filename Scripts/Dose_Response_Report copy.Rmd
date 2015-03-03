@@ -68,9 +68,11 @@ save(ordered.df, file = paste(processedDataPath, "/", experimentName, "_Processe
 ```{r Raw, warning = FALSE, message = FALSE, echo = FALSE, fig.path = paste(processedDataPath, "/", experimentName, "_", sep = ""), fig.width = 15, fig.height = 12}
 
 ggplot(ordered.df) + aes(x = time, y = activity) + geom_point() + facet_grid(row ~ col) +
-  labs(x = "Time (minutes)", y = "Raw Activity") + ylim(0, NA) + presentation
+  labs(x = "Time (minutes)", y = "Raw Activity") + presentation
 
 ```
+
+## Cleaned Data ##
 
 ```{r, warning = FALSE, message = FALSE, echo = FALSE}
 
@@ -90,6 +92,15 @@ save(cleaned.df, file = paste(processedDataPath, "/", experimentName, "_Cleaned.
 
 ```
 
+```{r Cleaned, warning = FALSE, message = FALSE, echo = FALSE, fig.path = paste(processedDataPath, "/", experimentName, "_", sep = ""), fig.width = 15, fig.height = 12}
+
+ggplot(cleaned.df) + aes(x = time, y = activity) + geom_line() + facet_grid(row ~ col) +
+  labs(x= "Time (minutes)", y = "Raw Activity") + presentation
+
+```
+
+## Well Normalized Data ##
+
 ```{r, warning = FALSE, message = FALSE, echo = FALSE}
 
 ## Normalize total activity data by the maximum activity of each well. ##
@@ -103,6 +114,25 @@ well.df <- cleaned.df %>%
 well.df <- ungroup(well.df)
 
 save(well.df, file = paste(processedDataPath, "/", experimentName, "_Well.Rda", sep = ""), ascii = TRUE)
+
+```
+
+```{r Well_Normalized, warning = FALSE, message = FALSE, echo = FALSE, fig.path = paste(processedDataPath, "/", experimentName, "_", sep = ""), fig.width = 15, fig.height = 12}
+
+ggplot(well.df) + aes(x = time, y = norm.act) + geom_line() + facet_grid(row ~ col) +
+  labs(x = "Time (minutes)", y = "Normalized Activity") + presentation
+
+```
+
+## Well Variation in Drug Concentration ##
+
+```{r Well_Dose_Response, warning = FALSE, message = FALSE, echo = FALSE, fig.path = paste(processedDataPath, "/", experimentName, "_", sep = ""), fig.width = 15, fig.height = 12}
+
+ggplot(well.df[well.df$time == time, ]) + aes(x = conc, y = norm.act, color = factor(col)) + geom_line() +
+  labs(x = "Concentration of Drug (µM)", y = "Activity") + presentation
+
+ggplot(well.df[well.df$time == time, ]) + aes(x = conc, y = norm.act) + geom_line() +
+  labs(x = "Concentration of Drug (µM)", y = "Activity") + presentation + facet_wrap( ~ col)
 
 ```
 
@@ -130,11 +160,60 @@ if (length(strains) != length(unique(strains))) {
 
 ```
 
-## Strain Mean and Median Data ##
+## Strain Mean Data ##
 
-```{r Strain_Mean_Median, warning = FALSE, message = FALSE, echo = FALSE, fig.path = paste(processedDataPath, "/", experimentName, "_", sep = ""), fig.width = 15, fig.height = 12}
+```{r Strain_Mean, warning = FALSE, message = FALSE, echo = FALSE, fig.path = paste(processedDataPath, "/", experimentName, "_", sep = ""), fig.width = 15, fig.height = 12}
 
-ggplot(strain.df) + geom_line(aes(x = time, y = mean.norm.act)) + geom_errorbar(aes(x = time, ymin = mean.norm.act - sd.norm.act, ymax = mean.norm.act + sd.norm.act)) + geom_line(aes(x = time, y = median.norm.act, color = "red")) + facet_grid(conc ~ strain) + labs(x = "Time (minutes)", y = "Normalized Activity") + ylim(0, NA) + presentation
+if (length(strains) != length(unique(strains))) {
+  ggplot(strain.df) + geom_line(aes(x = time, y = mean.norm.act)) + 
+    geom_errorbar(aes(x = time, ymin = mean.norm.act - sd.norm.act, ymax = mean.norm.act + sd.norm.act)) + 
+    facet_grid(conc ~ strain) + labs(x = "Time (minutes)", y = "Mean Activity") + presentation
+}
+
+```
+
+## Strain Median Data ##
+
+```{r Strain_Median, warning = FALSE, message = FALSE, echo = FALSE, fig.path = paste(processedDataPath, "/", experimentName, "_", sep = ""), fig.width = 15, fig.height = 12}
+
+if (length(strains) != length(unique(strains))) {
+  ggplot(strain.df) + aes(x = time, y = median.norm.act) + geom_line() + facet_grid(conc ~ strain) +
+    labs(x = "Time (minutes)", y = "Median Activity") + presentation
+}
+
+```
+
+## Strain Total Data ##
+
+```{r Strain_Total, warning = FALSE, message = FALSE, echo = FALSE, fig.path = paste(processedDataPath, "/", experimentName, "_", sep = ""), fig.width = 15, fig.height = 12}
+
+if (length(strains) != length(unique(strains))) {
+  ggplot(strain.df) + aes(x = time, y = total.norm.act) + geom_line() + facet_grid(conc ~ strain) +
+    labs(x = "Time (minutes)", y = "Total Activity") + presentation
+}
+
+```
+
+## Strain Normalized Data ##
+
+```{r, warning = FALSE, message = FALSE, echo = FALSE}
+
+if (length(strains) != length(unique(strains))) {
+  strain.df <- strain.df %>%
+    group_by(strain) %>%
+    mutate(percent.max.act = 100 * total.norm.act / max(total.norm.act, na.rm = TRUE))
+
+  strain.df <- ungroup(strain.df)
+}
+
+```
+
+```{r Strain_Normalized, warning = FALSE, message = FALSE, echo = FALSE, fig.path = paste(processedDataPath, "/", experimentName, "_", sep = ""), fig.width = 15, fig.height = 12}
+
+if (length(strains) != length(unique(strains))) {
+  ggplot(strain.df) + aes(x = time, y = percent.max.act) + ylim(0, 100) + geom_line() + facet_grid(conc ~ strain) + 
+    labs(x = "Time (minutes)", y = "Normalized Activity") + presentation
+}
 
 ```
 
@@ -142,11 +221,9 @@ ggplot(strain.df) + geom_line(aes(x = time, y = mean.norm.act)) + geom_errorbar(
 
 ```{r Strain_Dose_Response, warning = FALSE, message = FALSE, echo = FALSE, fig.path = paste(processedDataPath, "/", experimentName, "_", sep = ""), fig.width = 15, fig.height = 12}
 
-print("Variation in response at time = 10.")
-
 if (length(strains) != length(unique(strains))) {
-  ggplot(strain.df[strain.df$time == 10, ]) + aes(x = conc, y = mean.norm.act, color = strain) + geom_line() +
-    labs(x = "Concentration of drug (µM)", y = "Mean Activity") + ylim(0, NA) + presentation
+  ggplot(strain.df[strain.df$time == time, ]) + aes(x = conc, y = mean.norm.act, color = strain) + geom_line() +
+    labs(x = "Concentration of levamisole (µM)", y = "Mean Activity") + presentation
 }
 
 ```

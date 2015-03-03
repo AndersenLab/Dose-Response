@@ -1,9 +1,10 @@
 # Levamisol input file #
 
-strains <- c("LKC34", "MY23", "MY16", "ED3017", "DL238", "N2", "EG4725", "CX11314", "JU775", "JT11398", "JU258", "CB4856")
+strains <- c("LKC34", "N2", "LKC34", "CB4856", "CB4856", "CB4856", "JU775", "N2", "JU775", "LKC34", "JU775", "N2")
 nStrains <- length(strains)
 colRemove <- c()
-rowRemove<- c("H")
-wellRemove <- data.frame(col = c(), row = c())
+rowRemove <- c()
+wellRemove <- data.frame(col = c(3, 10, 7, 9), row = c("D", "E", "H", "H"))
+rows <- c("A", "B", "C", "D", "E", "F", "G", "H")
 
-conc <- c(0, 5, 10, 20, 40, 80, 160, 0) # µM
+conc <- c(160, 80, 40, 20, 5, 10, 2.5, 0) # µM
