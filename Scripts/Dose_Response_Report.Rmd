@@ -142,11 +142,19 @@ ggplot(strain.df) + geom_line(aes(x = time, y = mean.norm.act)) + geom_errorbar(
 
 ```{r Strain_Dose_Response, warning = FALSE, message = FALSE, echo = FALSE, fig.path = paste(processedDataPath, "/", experimentName, "_", sep = ""), fig.width = 15, fig.height = 12}
 
-print("Variation in response at time = 10.")
-
 if (length(strains) != length(unique(strains))) {
-  ggplot(strain.df[strain.df$time == 10, ]) + aes(x = conc, y = mean.norm.act, color = strain) + geom_line() +
-    labs(x = "Concentration of drug (µM)", y = "Mean Activity") + ylim(0, NA) + presentation
+  ggplot(strain.df) + aes(x = time, y = mean.norm.act, color = strain) + geom_line() + facet_wrap( ~ conc) + 
+    labs(x = "Time (mins)", y = "Mean Activity") + ylim(0, NA) + presentation
 }
 
 ```
+
+```{r Strain_Variability, warning = FALSE, message = FALSE, echo = FALSE, fig.path = paste(processedDataPath, "/", experimentName, "_", sep = ""), fig.width = 15, fig.height = 12}
+
+well_time.df <- well.df %>% filter(time == 44)
+
+ggplot(well_time.df) + aes(x = strain, y = norm.act) + geom_boxplot() + facet_wrap( ~ conc) + 
+    labs(x = "Strain", y = "Normalized Activity") + ylim(0, NA) + presentation
+
+```
+

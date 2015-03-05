@@ -10,14 +10,14 @@ output:
 
 
 ```
-## [1] "p02_praziquantel"
+## [1] "p02_pyrantel"
 ```
 
 
 
 ## Raw Activity ##
 
-![plot of chunk Raw](./Data/Processed/p02_praziquantel/p02_praziquantel_Raw-1.png) 
+![plot of chunk Raw](./Data/Processed/p02_pyrantel/p02_pyrantel_Raw-1.png) 
 
 
 
@@ -27,13 +27,11 @@ output:
 
 ## Strain Mean and Median Data ##
 
-![plot of chunk Strain_Mean_Median](./Data/Processed/p02_praziquantel/p02_praziquantel_Strain_Mean_Median-1.png) 
+![plot of chunk Strain_Mean_Median](./Data/Processed/p02_pyrantel/p02_pyrantel_Strain_Mean_Median-1.png) 
 
 ## Strain Variation in Drug Concentration ##
 
+![plot of chunk Strain_Dose_Response](./Data/Processed/p02_pyrantel/p02_pyrantel_Strain_Dose_Response-1.png) 
 
-```
-## [1] "Variation in response at time = 10."
-```
+![plot of chunk Strain_Variability](./Data/Processed/p02_pyrantel/p02_pyrantel_Strain_Variability-1.png) 
 
-![plot of chunk Strain_Dose_Response](./Data/Processed/p02_praziquantel/p02_praziquantel_Strain_Dose_Response-1.png) 
