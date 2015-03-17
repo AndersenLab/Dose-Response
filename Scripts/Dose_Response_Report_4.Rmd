@@ -58,6 +58,17 @@ ordered.df <- raw.df[order(raw.df$col, raw.df$row, raw.df$time), ]
 ordered.df$strain <- rep(strains, each = numBins * length(conc))
 ordered.df$conc <- rep(rep(conc, each = numBins), 12)
 ordered.df$num <- rep(nums, each = numBins)
+ordered.df$grouping <- rep(rep(1:15, each = 2), 96)
+
+ordered.df <- ordered.df %>%
+  group_by(row, col, strain, conc, grouping) %>%
+  summarize(activity = sum(activity, na.rm = TRUE),
+            num = mean(num, na.rm = TRUE),
+            time = mean(grouping * 4))
+ordered.df <- ungroup(ordered.df)
+
+binSize = binSize * 2
+numBins = numBins / 2
 
 save(ordered.df, file = paste(processedDataPath, "/", experimentName, "_Processed.Rda", sep = ""), ascii = TRUE)
 

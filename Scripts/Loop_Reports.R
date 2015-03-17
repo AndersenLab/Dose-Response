@@ -18,6 +18,12 @@ opts_knit$set(root.dir = getwd())
 
 for (i in 1:length(experiments.file)) {
   experimentName <- str_split(str_split(experiments.file[i], "Scripts/")[[1]][2], ".R")[[1]][1]
+  knit2html("./Scripts/Dose_Response_Report_10.Rmd", 
+            output = paste("./Results/", experimentName, "_10_Report.html", sep = ""),
+            stylesheet = "./Scripts/foghorn_edited.css")
+  knit2html("./Scripts/Dose_Response_Report_4.Rmd", 
+            output = paste("./Results/", experimentName, "_4_Report.html", sep = ""),
+            stylesheet = "./Scripts/foghorn_edited.css")
   knit2html("./Scripts/Dose_Response_Report.Rmd", 
             output = paste("./Results/", experimentName, "_Report.html", sep = ""),
             stylesheet = "./Scripts/foghorn_edited.css")
@@ -27,7 +33,7 @@ for (i in 1:length(experiments.file)) {
 
 experiments.file <- dir(path = "./Scripts", "p02", full.names = TRUE)
 opts_knit$set(root.dir = getwd())
-experimentName <- str_split(str_split(experiments.file[4], "Scripts/")[[1]][2], ".R")[[1]][1]
+experimentName <- str_split(str_split(experiments.file[6], "Scripts/")[[1]][2], ".R")[[1]][1]
 knit2html("./Scripts/Dose_Response_Report.Rmd", 
           output = paste("./Results/", experimentName, "_Report.html", sep = ""),
           stylesheet = "./Scripts/foghorn_edited.css")
